@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>EnglishPractice</title>
+<style>
+:root{
+  --bg1:#e7ecfc;
+  --bg2:#fbe9f6;
+  --bg3:#e3f8f1;
+  --bg4:#fff6e0;
+  --glass:rgba(255,255,255,0.60);
+  --glass-strong:rgba(255,255,255,0.86);
+  --stroke:rgba(255,255,255,0.95);
+  --stroke-soft:rgba(60,60,67,0.10);
+  --ink:#1c1c1e;
+  --ink-soft:#6e6e73;
+  --accent:#0A84FF;
+  --accent-2:#5AC8FA;
+  --accent-soft:rgba(10,132,255,0.13);
+  --green:#28A669;
+  --green-soft:rgba(40,166,105,0.14);
+  --red:#E5484D;
+  --red-soft:rgba(229,72,77,0.12);
+  --radius-lg:28px;
+  --radius-md:18px;
+  --radius-sm:13px;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display','Helvetica Neue',Arial,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 12% 6%, var(--bg1) 0%, transparent 50%),
+    radial-gradient(circle at 90% 10%, var(--bg2) 0%, transparent 50%),
+    radial-gradient(circle at 15% 85%, var(--bg3) 0%, transparent 50%),
+    radial-gradient(circle at 88% 92%, var(--bg4) 0%, transparent 50%),
+    #f4f5f9;
+  min-height:100vh;
+  overscroll-behavior:none;
+}
+.app{
+  max-width:480px;
+  margin:0 auto;
+  min-height:100vh;
+  padding:calc(env(safe-area-inset-top) + 18px) 16px calc(env(safe-area-inset-bottom) + 96px);
+  position:relative;
+}
+
+/* Top bar */
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:18px;
+  min-height:36px;
+}
+.topbar h1{
+  font-size:1.5rem;
+  font-weight:750;
+  letter-spacing:-0.02em;
+  margin:0;
+}
+.icon-btn{
+  width:36px;height:36px;
+  border-radius:50%;
+  background:var(--glass);
+  backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  border:1px solid var(--stroke);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--accent);
+  font-size:1.1rem;
+  cursor:pointer;
+  box-shadow:0 1px 2px rgba(0,0,0,0.06);
+  transition:transform .15s var(--ease);
+}
+.icon-btn:active{transform:scale(0.9);}
+.brand-row{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.brand-badge{
+  width:48px;height:48px;border-radius:15px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.45rem;
+  box-shadow:0 8px 18px rgba(10,132,255,0.32), inset 0 1px 0 rgba(255,255,255,0.4);
+  flex-shrink:0;
+}
+.brand-row h1{font-size:1.55rem;font-weight:800;letter-spacing:-0.02em;margin:0;line-height:1.1;}
+.brand-sub{font-size:0.82rem;color:var(--ink-soft);margin:2px 0 0;}
+.back-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.back-row .icon-btn{width:32px;height:32px;font-size:1rem;}
+.back-row .label{font-size:0.95rem;color:var(--ink-soft);font-weight:600;}
+
+/* Glass card */
+.card{
+  background:var(--glass);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  border:1px solid var(--stroke);
+  border-radius:var(--radius-lg);
+  box-shadow:0 10px 34px rgba(31,41,55,0.08), inset 0 1px 0 rgba(255,255,255,0.7);
+  padding:20px;
+  margin-bottom:14px;
+  position:relative;
+  overflow:hidden;
+}
+.card::before{
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
+}
+
+/* List cards on home */
+.set-card{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:16px 18px;
+  cursor:pointer;
+  transition:transform .18s var(--ease);
+}
+.set-card:active{transform:scale(0.98);}
+.set-card .swatch{
+  width:48px;height:48px;border-radius:15px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.35rem;
+  flex-shrink:0;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);
+}
+.set-card .info{flex:1; min-width:0;}
+.set-card .info h3{margin:0 0 3px; font-size:1.04rem; font-weight:650; letter-spacing:-0.01em;}
+.set-card .info p{margin:0; font-size:0.78rem; color:var(--ink-soft);}
+.set-card .chev{color:var(--ink-soft); opacity:0.5; font-size:1rem;}
+.set-card .del{
+  width:26px;height:26px;border-radius:50%;
+  background:rgba(120,120,128,0.1); color:var(--ink-soft);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.75rem; flex-shrink:0; cursor:pointer;
+  transition:all .15s var(--ease);
+}
+.set-card .del:active{background:var(--red-soft); color:var(--red); transform:scale(0.9);}
+
+.empty{
+  text-align:center;
+  padding:60px 20px;
+  color:var(--ink-soft);
+}
+.empty .em-icon{font-size:2.4rem;margin-bottom:10px;}
+.empty h3{color:var(--ink); font-size:1.05rem; margin:0 0 6px;}
+.empty p{font-size:0.85rem; margin:0 0 20px; line-height:1.4;}
+
+/* Big CTA */
+.cta{
+  display:block;
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:var(--radius-md);
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  color:#fff;
+  font-size:1rem;
+  font-weight:650;
+  letter-spacing:-0.01em;
+  cursor:pointer;
+  transition:transform .15s var(--ease), opacity .15s;
+  box-shadow:0 8px 20px rgba(10,132,255,0.32);
+}
+.cta:disabled{opacity:0.45; box-shadow:none; cursor:default;}
+.cta:disabled:active{transform:none;}
+.cta:active{transform:scale(0.97);}
+.cta.secondary{
+  background:var(--glass-strong);
+  color:var(--accent);
+  box-shadow:none;
+  border:1px solid var(--stroke-soft);
+}
+
+/* Form */
+.field{margin-bottom:16px;}
+.field label{
+  display:block;
+  font-size:0.8rem;
+  font-weight:650;
+  color:var(--ink-soft);
+  margin-bottom:7px;
+  text-transform:uppercase;
+  letter-spacing:0.02em;
+}
+.field input[type=text], .field textarea{
+  width:100%;
+  font-family:inherit;
+  font-size:0.95rem;
+  padding:12px 14px;
+  border-radius:var(--radius-sm);
+  border:1px solid var(--stroke-soft);
+  background:rgba(255,255,255,0.7);
+  color:var(--ink);
+  resize:vertical;
+}
+.field textarea{min-height:150px; font-family:ui-monospace,'SF Mono',Menlo,monospace; font-size:0.78rem; line-height:1.5;}
+.field input:focus, .field textarea:focus{outline:2px solid var(--accent); outline-offset:1px;}
+.hint{font-size:0.75rem; color:var(--ink-soft); margin-top:6px; line-height:1.4;}
+
+.stepper{
+  display:flex; align-items:center; gap:14px;
+  background:rgba(255,255,255,0.7);
+  border-radius:var(--radius-sm);
+  padding:8px 14px;
+  border:1px solid var(--stroke-soft);
+  width:fit-content;
+}
+.stepper button{
+  width:30px;height:30px;border-radius:50%;
+  border:none; background:var(--accent-soft); color:var(--accent);
+  font-size:1.1rem; font-weight:700; cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.stepper button:active{transform:scale(0.9);}
+.stepper .val{font-size:1.05rem; font-weight:650; min-width:20px; text-align:center;}
+
+.parse-preview{
+  font-size:0.8rem;
+  color:var(--ink-soft);
+  background:var(--accent-soft);
+  border-radius:var(--radius-sm);
+  padding:10px 14px;
+  margin-bottom:16px;
+  display:none;
+}
+.parse-preview.show{display:block;}
+.parse-preview b{color:var(--accent);}
+.parse-preview.warn{background:var(--red-soft); color:var(--red);}
+.parse-preview.warn b{color:var(--red);}
+
+/* Segmented control */
+.segmented{
+  display:flex;
+  background:rgba(120,120,128,0.12);
+  border-radius:var(--radius-sm);
+  padding:3px;
+  margin-bottom:14px;
+}
+.segmented button{
+  flex:1;
+  border:none;
+  background:none;
+  padding:8px 4px;
+  font-size:0.82rem;
+  font-weight:600;
+  color:var(--ink-soft);
+  border-radius:9px;
+  cursor:pointer;
+  transition:all .2s var(--ease);
+}
+.segmented button.active{
+  background:var(--glass-strong);
+  color:var(--ink);
+  box-shadow:0 1px 4px rgba(0,0,0,0.12);
+}
+
+/* Day pills */
+.day-pills{
+  display:flex; gap:8px; overflow-x:auto; padding-bottom:4px; margin-bottom:14px;
+  scrollbar-width:none;
+}
+.day-pills::-webkit-scrollbar{display:none;}
+.day-pill{
+  flex-shrink:0;
+  padding:9px 16px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.55);
+  border:1px solid var(--stroke-soft);
+  font-size:0.82rem;
+  font-weight:600;
+  color:var(--ink-soft);
+  cursor:pointer;
+  white-space:nowrap;
+  transition:all .2s var(--ease);
+}
+.day-pill.active{
+  background:var(--ink);
+  color:#fff;
+  border-color:var(--ink);
+}
+.chip-select{
+  flex-shrink:0;
+  padding:9px 16px;
+  border-radius:20px;
+  background:var(--accent-soft);
+  border:1.5px solid transparent;
+  font-size:0.82rem;
+  font-weight:600;
+  color:var(--accent);
+  cursor:pointer;
+  white-space:nowrap;
+  transition:all .2s var(--ease);
+}
+.chip-select.off{
+  background:rgba(120,120,128,0.1);
+  color:var(--ink-soft);
+}
+.section-title{font-size:0.8rem;font-weight:700;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.02em;margin:2px 0 10px;}
+
+.wordlist{
+  max-height:220px;
+  overflow-y:auto;
+  font-size:0.82rem;
+  line-height:1.6;
+}
+.wordlist .row{
+  display:flex; justify-content:space-between; gap:10px;
+  padding:7px 0;
+  border-bottom:1px solid rgba(60,60,67,0.08);
+}
+.wordlist .row:last-child{border-bottom:none;}
+.wordlist .en{font-weight:600; color:var(--ink);}
+.wordlist .fr{color:var(--ink-soft); text-align:right;}
+.meta-line{font-size:0.78rem; color:var(--ink-soft); margin-bottom:12px;}
+
+/* Quiz card */
+.quiz-tag{
+  display:inline-block;
+  font-size:0.7rem;
+  font-weight:700;
+  letter-spacing:0.03em;
+  color:#fff;
+  background:var(--ink);
+  padding:4px 10px;
+  border-radius:8px;
+  margin-bottom:14px;
+}
+.quiz-progress{
+  display:flex; justify-content:space-between;
+  font-size:0.78rem; color:var(--ink-soft);
+  margin-bottom:6px;
+}
+.progress-bar{
+  height:5px; border-radius:3px;
+  background:rgba(60,60,67,0.12);
+  overflow:hidden;
+  margin-bottom:20px;
+}
+.progress-fill{
+  height:100%; background:var(--accent);
+  border-radius:3px;
+  transition:width .3s var(--ease);
+}
+.prompt{
+  font-size:1.35rem;
+  font-weight:650;
+  letter-spacing:-0.01em;
+  line-height:1.3;
+  margin-bottom:20px;
+  min-height:2.6em;
+  display:flex;align-items:center;
+}
+.answer-input{
+  width:100%;
+  font-size:1.05rem;
+  padding:14px 16px;
+  border-radius:var(--radius-sm);
+  border:1.5px solid var(--stroke-soft);
+  background:rgba(255,255,255,0.75);
+  margin-bottom:14px;
+  font-family:inherit;
+}
+.answer-input:focus{outline:2px solid var(--accent); outline-offset:1px; border-color:transparent;}
+.answer-input:disabled{opacity:0.7;}
+.qrow{display:flex; gap:10px;}
+.qrow button{
+  border:none; border-radius:var(--radius-sm);
+  padding:14px; font-size:0.95rem; font-weight:650;
+  cursor:pointer; transition:transform .15s var(--ease);
+}
+.qrow button:active{transform:scale(0.97);}
+.btn-check{background:var(--ink); color:#fff; flex:2;}
+.btn-idk{background:rgba(120,120,128,0.12); color:var(--ink-soft); flex:1;}
+.feedback{
+  margin-top:14px; padding:13px 15px; border-radius:var(--radius-sm);
+  font-size:0.9rem; display:none; line-height:1.4;
+}
+.feedback.good{display:block; background:var(--green-soft); color:var(--green);}
+.feedback.close{display:block; background:rgba(255,159,10,0.14); color:#B87400;}
+.feedback.bad{display:block; background:var(--red-soft); color:var(--red);}
+.feedback b{color:var(--ink);}
+.next-btn{
+  display:none; width:100%; margin-top:12px;
+  padding:14px; border:none; border-radius:var(--radius-sm);
+  background:var(--accent); color:#fff; font-size:0.95rem; font-weight:650;
+  cursor:pointer;
+}
+
+.done-wrap{text-align:center; padding:20px 8px 6px;}
+.done-score{font-size:2.6rem; font-weight:750; color:var(--ink); letter-spacing:-0.02em;}
+.done-wrap p{color:var(--ink-soft); font-size:0.85rem; margin:4px 0 18px;}
+
+/* Bottom tab bar */
+.tabbar{
+  position:fixed;
+  bottom:0; left:0; right:0;
+  display:flex;
+  justify-content:center;
+  padding:0 16px calc(env(safe-area-inset-bottom) + 12px);
+  pointer-events:none;
+}
+.tabbar-inner{
+  pointer-events:auto;
+  max-width:480px;
+  width:100%;
+  display:flex;
+  background:var(--glass-strong);
+  backdrop-filter:blur(28px) saturate(180%);
+  -webkit-backdrop-filter:blur(28px) saturate(180%);
+  border:1px solid var(--stroke);
+  border-radius:22px;
+  box-shadow:0 10px 30px rgba(31,41,55,0.14);
+  padding:8px;
+  gap:4px;
+}
+.tab-btn{
+  flex:1;
+  border:none; background:none;
+  display:flex; flex-direction:column; align-items:center; gap:2px;
+  padding:8px 4px;
+  border-radius:16px;
+  color:var(--ink-soft);
+  font-size:0.68rem;
+  font-weight:600;
+  cursor:pointer;
+  transition:all .2s var(--ease);
+}
+.tab-btn .ti{font-size:1.15rem;}
+.tab-btn.active{background:var(--accent-soft); color:var(--accent); box-shadow:0 0 0 1px rgba(10,132,255,0.12) inset;}
+
+.toast{
+  position:fixed; left:50%; bottom:110px; transform:translateX(-50%) translateY(20px);
+  background:rgba(28,28,30,0.92); color:#fff;
+  padding:11px 20px; border-radius:16px; font-size:0.85rem; font-weight:600;
+  opacity:0; transition:all .3s var(--ease); pointer-events:none;
+  backdrop-filter:blur(10px);
+  z-index:50;
+  white-space:nowrap;
+}
+.toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+.loading{text-align:center; padding:60px 20px; color:var(--ink-soft); font-size:0.9rem;}
+
+.auth-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.auth-actions .cta{flex:1;min-width:140px}.auth-note{font-size:.82rem;color:var(--ink-soft);line-height:1.45;margin-top:12px}.auth-switch{text-align:center;margin-top:14px;font-size:.86rem;color:var(--ink-soft)}.auth-switch button{border:0;background:none;color:var(--accent);font:inherit;cursor:pointer;text-decoration:underline}.danger{background:#fff0f0!important;color:#c62828!important;border:1px solid #f2b8b8!important}.account-email{font-size:.84rem;color:var(--ink-soft);margin-top:4px;word-break:break-all}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<div class="app" id="app"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const SEED = {"id": "seed-environmental-issues", "title": "Environmental Issues", "createdAt": 0, "days": [{"title": "Environnement, nature & biodiversité", "items": [["environmental", "écologique, lié à l'environnement"], ["an environmentally-friendly / eco-friendly policy", "une politique qui respecte l'environnement"], ["to protect, to preserve the environment", "protéger l'environnement"], ["the preservation of the environment", "la protection de l'environnement"], ["nature", "la nature"], ["wildlife", "la faune et la flore"], ["fauna / flora", "la faune / la flore"], ["an environmentalist, an ecologist", "un écologiste"], ["a green activist", "un militant écologiste"], ["a conservationist", "un défenseur de l'environnement"], ["an awareness(-raising) campaign", "une campagne de sensibilisation"], ["a natural reserve, a national park", "un parc naturel, une réserve naturelle"], ["damage", "dégâts"], ["to damage sth", "endommager qch, porter atteinte à qch"], ["to do damage, to cause damage", "causer des dégâts"], ["to harm the environment", "nuire à l'environnement"], ["to jeopardize sth, to endanger sth", "mettre en danger qch"], ["to be at risk, to be in danger", "être en danger"], ["to declare a state of emergency", "déclarer l'état d'urgence"], ["a disaster victim", "un sinistré"], ["sustainable development", "le développement durable"], ["scarcity", "la rareté"], ["an ecosystem", "un écosystème"], ["natural resources", "les ressources naturelles"], ["the depletion of resources", "l'épuisement des ressources"], ["raw materials", "les matières premières"], ["biodiversity", "la biodiversité"], ["a species", "une espèce"], ["an animal / plant species", "une espèce animale / végétale"], ["an endangered species", "une espèce en voie de disparition"], ["to be threatened with extinction", "être menacé d'extinction"], ["to become extinct", "disparaître"], ["a rainforest, a tropical forest", "une forêt tropicale"], ["to fell, cut down trees", "abattre des arbres"], ["deforestation", "le déboisement, la déforestation"], ["to reforest", "reboiser"], ["reforestation", "le reboisement"], ["overfishing", "la surpêche"], ["bluefin tuna", "le thon rouge"], ["a dolphin / a whale", "un dauphin / une baleine"], ["whaling", "la pêche à la baleine"]]}, {"title": "Catastrophes naturelles & météo", "items": [["a natural disaster", "une catastrophe naturelle"], ["a tragedy", "un drame, une tragédie"], ["tragic", "dramatique, tragique"], ["a catastrophe", "une catastrophe, un sinistre"], ["to affect a region", "toucher une région"], ["to devastate, to ravage a region", "dévaster, ravager une région"], ["to wreak havoc", "faire des ravages"], ["to avert a disaster", "éviter, prévenir une catastrophe"], ["the scope / the extent of the disaster", "l'étendue, l'ampleur du sinistre"], ["severe, extreme weather", "très mauvais temps"], ["to predict, to forecast the weather", "prévoir le temps"], ["the weather forecast", "les prévisions météo(rologiques)"], ["drought", "la sécheresse"], ["a famine", "la famine"], ["hunger", "la faim"], ["to starve to death", "mourir de faim"], ["to die of thirst", "mourir de soif"], ["malnutrition", "la malnutrition"], ["to be malnourished, undernourished", "souffrir de malnutrition"], ["a cold spell, a cold wave", "une vague de froid"], ["a heat wave", "une canicule"], ["a storm", "une tempête, un orage"], ["a tornado, a twister", "une tornade"], ["a hurricane, a cyclone", "un ouragan, un cyclone"], ["a typhoon", "un typhon"], ["torrential rain", "des pluies torrentielles, diluviennes"], ["a flood", "une inondation"], ["flooding", "des inondations"], ["a flash flood", "une crue subite"], ["a flood risk area", "une zone inondable"], ["an earthquake", "un tremblement de terre, un séisme"], ["a fault", "une faille"], ["a fault line", "une ligne de faille"], ["the epicentre", "l'épicentre"], ["rubble, debris", "les décombres"], ["to be trapped / buried in rubble", "être prisonnier / enterré sous les décombres"], ["ruins", "ruines"], ["to be reported missing", "être porté disparu"]]}, {"title": "Séismes, volcans, secours & indemnisation", "items": [["a tsunami", "un tsunami"], ["a tidal wave", "un raz-de-marée"], ["a landslide", "un glissement de terrain"], ["a mudslide", "une coulée de boue"], ["a snowstorm", "une tempête de neige"], ["an avalanche", "une avalanche"], ["a volcano", "un volcan"], ["a crater", "un cratère"], ["an eruption", "une éruption"], ["lava", "la lave"], ["a lava flow", "une coulée de lave"], ["ash", "les cendres"], ["a fire", "un incendie"], ["to rescue", "sauver"], ["a rescuer, a rescue worker", "un secouriste, un sauveteur"], ["a rescue party", "une équipe de secours"], ["a fireman, a firefighter", "un pompier"], ["to evacuate", "évacuer"], ["to be safe", "être en sécurité, hors de danger"], ["to survive", "survivre"], ["a survivor", "un survivant, un rescapé"], ["a relief agency, a relief organization", "une organisation humanitaire"], ["a relief worker", "un travailleur humanitaire"], ["humanitarian aid, assistance", "aide, assistance humanitaire"], ["emergency aid, emergency relief", "secours, aide d'urgence"], ["to insure sth", "assurer qch"], ["an insurance company", "une compagnie d'assurances"], ["compensation", "une indemnité, des indemnités"], ["to compensate sb for sth", "indemniser qn de qch"], ["to get compensation, to get reimbursed", "se faire indemniser"], ["the Department of the Environment", "le Ministère de l'environnement"], ["an environmental disaster", "une catastrophe écologique"], ["environmentally friendly, environment-friendly", "respectueux de l'environnement"], ["to be hungry", "avoir faim"], ["scarce", "rare"], ["dry", "sec"]]}]};
+
+let VIEW = 'home'; // home | add | set
+let sets = [];
+let currentSetId = null;
+let currentDayIdx = 0;
+let quiz = { direction:'mix', queue:[], index:0, score:0, answered:false };
+let storageOK = true;
+let loadedSets = {}; // setId -> full set object cache (used for stats + cross-list review)
+let reviewSelection = null; // Set of setIds included in "Réviser tout" (null = all)
+let reviewStarted = false;
+
+const SWATCHES = [
+  {bg:'rgba(10,132,255,0.15)', fg:'#0A84FF', icon:'🌍'},
+  {bg:'rgba(48,164,108,0.15)', fg:'#30A46C', icon:'📗'},
+  {bg:'rgba(255,159,10,0.16)', fg:'#C87A00', icon:'🗂️'},
+  {bg:'rgba(191,90,242,0.15)', fg:'#8E4EC6', icon:'✨'},
+  {bg:'rgba(229,72,77,0.13)', fg:'#E5484D', icon:'🔥'},
+];
+function swatchFor(id){
+  let h=0; for(const c of id) h = (h*31 + c.charCodeAt(0)) % 997;
+  return SWATCHES[h % SWATCHES.length];
+}
+
+const LS_PREFIX = 'vocabtool:';
+
+// ---------- Supabase account + cloud storage ----------
+// 1) Create a Supabase project.
+// 2) Replace these two values with your project's URL and anon/publishable key.
+const SUPABASE_URL = 'https://cjqjppeguopjyrowpwyg.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_MnfASvkWc-cDvA-0qScyVg_KCq5oiHL';
+const supabaseConfigured = SUPABASE_URL.startsWith('https://') && !SUPABASE_URL.includes('YOUR_') && !SUPABASE_ANON_KEY.includes('YOUR_');
+const sb = supabaseConfigured ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+let PROFILE = null;
+let AUTH_USER = null;
+let authMode = 'login';
+let authBusy = false;
+
+function getProfiles(){
+  try{ return JSON.parse(localStorage.getItem(LS_PREFIX+'profiles') || '[]'); }
+  catch(e){ return []; }
+}
+function saveProfiles(list){ try{ localStorage.setItem(LS_PREFIX+'profiles', JSON.stringify(list)); }catch(e){} }
+function setActiveProfile(name){ PROFILE = name; try{ localStorage.setItem(LS_PREFIX+'activeProfile', name); }catch(e){} }
+function scopedKey(key){ return 'p:'+PROFILE+':'+key; }
+
+async function cloudList(){
+  if(!sb || !AUTH_USER) return [];
+  const {data,error} = await sb.from('vocab_sets').select('id,title,created_at,data').eq('user_id', AUTH_USER.id);
+  if(error) throw error;
+  return (data||[]).map(r=>({
+    id:r.id, title:r.title, createdAt:r.created_at ? new Date(r.created_at).getTime() : Date.now(),
+    itemCount:r.data?.itemCount ?? r.data?.days?.reduce((a,d)=>a+d.items.length,0) ?? 0,
+    dayCount:r.data?.dayCount ?? r.data?.days?.length ?? 0,
+    lastReviewedAt:r.data?.lastReviewedAt || null
+  }));
+}
+
+async function sGet(key){
+  if(!sb || !AUTH_USER) return null;
+  if(key==='index') return await cloudList();
+  if(!key.startsWith('set:')) return null;
+  const id=key.slice(4);
+  const {data,error}=await sb.from('vocab_sets').select('data').eq('id',id).eq('user_id',AUTH_USER.id).maybeSingle();
+  if(error) throw error;
+  return data?.data || null;
+}
+
+async function sSet(key,value){
+  if(!sb || !AUTH_USER){ storageOK=false; return false; }
+  if(key==='index') return true; // index is derived from vocab_sets
+  if(!key.startsWith('set:')) return false;
+  const id=key.slice(4);
+  const row={id,user_id:AUTH_USER.id,title:value.title||'Sans titre',data:value};
+  const {error}=await sb.from('vocab_sets').upsert(row,{onConflict:'id'});
+  if(error){ storageOK=false; throw error; }
+  return true;
+}
+
+async function sDelete(key){
+  if(!sb || !AUTH_USER) return false;
+  if(key==='index') return true;
+  const id=key.slice(4);
+  const {error}=await sb.from('vocab_sets').delete().eq('id',id).eq('user_id',AUTH_USER.id);
+  if(error) throw error;
+  return true;
+}
+
+async function migrateLocalProfileIfNeeded(legacyProfile){
+  if(!AUTH_USER) return;
+  const legacy = legacyProfile || PROFILE;
+  if(!legacy) return;
+  const remote=await cloudList();
+  if(remote.length) return;
+  let localIndex=null;
+  try{ localIndex=JSON.parse(localStorage.getItem(LS_PREFIX+'p:'+legacy+':index') || 'null'); }catch(e){}
+  if(!Array.isArray(localIndex) || !localIndex.length) return;
+  for(const entry of localIndex){
+    try{
+      const raw=localStorage.getItem(LS_PREFIX+'p:'+legacy+':set:'+entry.id);
+      if(raw){ const obj=JSON.parse(raw); await sSet('set:'+entry.id,obj); }
+    }catch(e){}
+  }
+}
+
+function authErrorMessage(err){
+  const m=String(err?.message||err||'Erreur');
+  if(/invalid login credentials/i.test(m)) return 'Email ou mot de passe incorrect.';
+  if(/email.*confirm/i.test(m)) return 'Vérifie ton email pour confirmer ton compte.';
+  if(/already registered/i.test(m)) return 'Un compte existe déjà avec cet email.';
+  return m;
+}
+
+function showAuthGate(message=''){
+  authBusy=false;
+  if(!supabaseConfigured){
+    appEl.innerHTML=`<div class="brand-row" style="margin-top:36px;"><div class="brand-badge">📘</div><div><h1>EnglishPractice</h1><p class="brand-sub">Connexion cloud</p></div></div><div class="card"><div class="section-title">Supabase n'est pas configuré</div><p class="auth-note">Ajoute ton URL Supabase et ta clé anon/publishable dans le code, puis recharge la page.</p></div>`;
+    return;
+  }
+  appEl.innerHTML=`
+    <div class="brand-row" style="margin-top:36px;"><div class="brand-badge">📘</div><div><h1>EnglishPractice</h1><p class="brand-sub">Tes listes, partout avec toi</p></div></div>
+    <div class="card">
+      <div class="section-title">${authMode==='login'?'Se connecter':'Créer un compte'}</div>
+      ${message?`<div class="auth-note" style="color:#c62828;">${escapeHtml(message)}</div>`:''}
+      <div class="field"><label>Email</label><input type="email" id="authEmail" autocomplete="email" placeholder="toi@exemple.com"></div>
+      <div class="field"><label>Mot de passe</label><input type="password" id="authPassword" autocomplete="${authMode==='login'?'current-password':'new-password'}" placeholder="••••••••"></div>
+      <div class="auth-actions"><button class="cta" id="authSubmit">${authMode==='login'?'Se connecter':'Créer mon compte'}</button></div>
+      <div class="auth-switch">${authMode==='login'?'Pas encore de compte ?':'Déjà un compte ?'} <button id="authToggle">${authMode==='login'?'Créer un compte':'Se connecter'}</button></div>
+      <p class="auth-note">Tes listes et ta progression seront associées à ton compte et accessibles depuis tes autres appareils.</p>
+    </div>`;
+  const email=document.getElementById('authEmail'), pass=document.getElementById('authPassword');
+  document.getElementById('authToggle').onclick=()=>{authMode=authMode==='login'?'signup':'login';showAuthGate();};
+  document.getElementById('authSubmit').onclick=async()=>{
+    if(authBusy)return; authBusy=true;
+    const e=email.value.trim(), pw=pass.value;
+    if(!e||!pw){authBusy=false;showAuthGate('Renseigne ton email et ton mot de passe.');return;}
+    try{
+      let result;
+      if(authMode==='login') result=await sb.auth.signInWithPassword({email:e,password:pw});
+      else result=await sb.auth.signUp({email:e,password:pw});
+      if(result.error) throw result.error;
+      if(authMode==='signup' && !result.data.session){ showAuthGate('Compte créé. Vérifie ton email pour confirmer ton inscription.'); return; }
+      AUTH_USER=result.data.user;
+      let legacyProfile=null; try{ legacyProfile=localStorage.getItem(LS_PREFIX+'activeProfile'); }catch(x){}
+      PROFILE=(AUTH_USER.user_metadata?.name || e.split('@')[0]).trim();
+      setActiveProfile(PROFILE);
+      await migrateLocalProfileIfNeeded(legacyProfile);
+      sets=[];loadedSets={};currentSetObj=null;currentSetId=null;VIEW='home';await startApp();
+    }catch(err){showAuthGate(authErrorMessage(err));}
+  };
+  [email,pass].forEach(el=>el.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('authSubmit').click();}));
+}
+
+async function signOut(){
+  if(sb) await sb.auth.signOut();
+  AUTH_USER=null; PROFILE=null; sets=[]; loadedSets={}; currentSetObj=null; currentSetId=null; VIEW='home'; showAuthGate();
+}
+
+async function deleteAccount(){
+  if(!sb||!AUTH_USER)return;
+  const ok=confirm('Supprimer définitivement ton compte et toutes tes listes/progressions ? Cette action est irréversible.');
+  if(!ok)return;
+  const {error}=await sb.rpc('delete_my_account');
+  if(error){showToast('Impossible de supprimer le compte : '+error.message);return;}
+  AUTH_USER=null; PROFILE=null; sets=[]; loadedSets={}; currentSetObj=null; currentSetId=null; VIEW='home';
+  try{localStorage.removeItem(LS_PREFIX+'activeProfile');}catch(e){}
+  showAuthGate();
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(()=>t.classList.remove('show'), 2000);
+}
+
+async function loadIndex(){
+  const idx = await sGet('index');
+  if(idx){ sets = idx; return; }
+  // first run: seed with default list
+  const seeded = [{id:SEED.id, title:SEED.title, createdAt:Date.now(),
+    itemCount:SEED.days.reduce((a,d)=>a+d.items.length,0), dayCount:SEED.days.length}];
+  await sSet('index', seeded);
+  await sSet('set:'+SEED.id, SEED);
+  sets = seeded;
+}
+
+async function saveIndex(){ await sSet('index', sets); }
+
+function stripArticles(s){
+  return s.replace(/^(to |an |a |the |une |un |les |la |le |l')/i,'').trim();
+}
+function normalize(s){
+  return stripArticles(s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[()]/g,'').trim());
+}
+function splitAlternatives(s){ return s.split(/,|\//).map(x=>x.trim()).filter(Boolean); }
+
+function levenshtein(a, b){
+  const m = a.length, n = b.length;
+  if(m===0) return n; if(n===0) return m;
+  const dp = Array.from({length:m+1}, (_,i)=>[i, ...Array(n).fill(0)]);
+  for(let j=0;j<=n;j++) dp[0][j]=j;
+  for(let i=1;i<=m;i++){
+    for(let j=1;j<=n;j++){
+      dp[i][j] = a[i-1]===b[j-1] ? dp[i-1][j-1] : 1+Math.min(dp[i-1][j-1],dp[i-1][j],dp[i][j-1]);
+    }
+  }
+  return dp[m][n];
+}
+function closestDistance(input, alternatives){
+  return Math.min(...alternatives.map(alt=>levenshtein(input,alt)));
+}
+function isCloseEnough(dist, len){
+  return dist>0 && dist <= (len<=5 ? 1 : 2);
+}
+
+function pairKey(en, fr, dir){ return en+'|||'+fr+'|||'+dir; }
+function repsFor(statsObj, key){
+  const stat = statsObj && statsObj[key];
+  if(!stat) return 1;
+  const extra = Math.max(0, Math.min(2, stat.wrong - stat.right));
+  return 1 + extra;
+}
+async function recordAnswer(item, correct){
+  const setObj = loadedSets[item.setId];
+  if(!setObj) return;
+  setObj.stats = setObj.stats || {};
+  const s = setObj.stats[item.key] || {wrong:0, right:0};
+  if(correct) s.right++; else s.wrong++;
+  setObj.stats[item.key] = s;
+  setObj.lastReviewedAt = Date.now();
+  await sSet('set:'+item.setId, setObj);
+  const idxEntry = sets.find(s2=>s2.id===item.setId);
+  if(idxEntry){ idxEntry.lastReviewedAt = setObj.lastReviewedAt; await saveIndex(); }
+}
+function formatRelative(ts){
+  if(!ts) return 'Jamais révisée';
+  const diffMs = Date.now() - ts;
+  const day = 86400000;
+  const days = Math.floor(diffMs / day);
+  if(days <= 0) return "Révisée aujourd'hui";
+  if(days === 1) return 'Révisée hier';
+  if(days < 7) return `Révisée il y a ${days} jours`;
+  if(days < 30) return `Révisée il y a ${Math.floor(days/7)} sem.`;
+  return `Révisée il y a ${Math.floor(days/30)} mois`;
+}
+function priorityCount(setObj, items){
+  const stats = setObj.stats || {};
+  return items.filter(([en,fr])=>{
+    const a = stats[pairKey(en,fr,'fr2en')], b = stats[pairKey(en,fr,'en2fr')];
+    return (a && a.wrong > a.right) || (b && b.wrong > b.right);
+  }).length;
+}
+
+// ---------- Parsing pasted lists ----------
+// Accepts tab-separated (Anki export), " - " / " – " / " : " separated lines,
+// or 2+ spaces used as a column separator — whichever the pasted list uses.
+function splitLine(line){
+  if(line.includes('\t')) return line.split('\t');
+  if(/\s-\s/.test(line)) return line.split(/\s-\s/);
+  if(/\s–\s/.test(line)) return line.split(/\s–\s/);
+  if(line.includes(' : ')) return line.split(' : ');
+  if(/\s{2,}/.test(line)) return line.split(/\s{2,}/);
+  return [line];
+}
+function parseVocabText(text){
+  const rawLines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+  const pairs = [];
+  const seenKeys = new Set();
+  for(const line of rawLines){
+    const parts = splitLine(line);
+    if(parts.length < 2) continue;
+    const a = parts[0].trim(), b = parts.slice(1).join(' - ').trim();
+    if(!a || !b) continue;
+    const revKey = (b+'|||'+a).toLowerCase();
+    if(seenKeys.has(revKey)) continue; // this is the reverse of a pair we already kept
+    const fwdKey = (a+'|||'+b).toLowerCase();
+    if(seenKeys.has(fwdKey)) continue;
+    seenKeys.add(fwdKey);
+    pairs.push([a,b]);
+  }
+  return pairs;
+}
+
+function chunkIntoDays(pairs, dayCount){
+  const n = pairs.length;
+  const base = Math.floor(n/dayCount), rem = n%dayCount;
+  const days = [];
+  let idx=0;
+  for(let d=0; d<dayCount; d++){
+    const size = base + (d < rem ? 1 : 0);
+    days.push({ title:`Partie ${d+1}`, items: pairs.slice(idx, idx+size) });
+    idx += size;
+  }
+  return days.filter(d=>d.items.length>0);
+}
+
+// ---------- Rendering ----------
+const appEl = document.getElementById('app');
+
+function render(){
+  if(VIEW==='home') renderHome();
+  else if(VIEW==='add') renderAdd();
+  else if(VIEW==='set') renderSet();
+  else if(VIEW==='reviewAll') renderReviewAll();
+  else if(VIEW==='editSet') renderEditSet();
+}
+
+function tabbarHtml(){
+  return `
+  <div class="tabbar"><div class="tabbar-inner">
+    <button class="tab-btn ${VIEW==='home'?'active':''}" id="tabHome"><span class="ti">📚</span>Listes</button>
+    <button class="tab-btn ${VIEW==='reviewAll'?'active':''}" id="tabReview"><span class="ti">🔁</span>Réviser tout</button>
+    <button class="tab-btn ${VIEW==='add'?'active':''}" id="tabAdd"><span class="ti">➕</span>Ajouter</button>
+  </div></div>`;
+}
+
+function bindTabbar(){
+  document.getElementById('tabHome').onclick = ()=>{ VIEW='home'; render(); };
+  document.getElementById('tabAdd').onclick = ()=>{ VIEW='add'; render(); };
+  document.getElementById('tabReview').onclick = ()=>{ reviewStarted=false; VIEW='reviewAll'; render(); };
+}
+
+function renderHome(){
+  let listHtml;
+  if(sets.length===0){
+    listHtml = `<div class="empty"><div class="em-icon">📭</div><h3>Aucune liste pour l'instant</h3>
+      <p>Ajoute ta première liste de vocabulaire pour commencer à réviser.</p>
+      <button class="cta" id="emptyAdd" style="max-width:220px;margin:0 auto;">Ajouter une liste</button></div>`;
+  } else {
+    listHtml = sets.slice().sort((a,b)=>b.createdAt-a.createdAt).map(s=>{
+      const sw = swatchFor(s.id);
+      return `<div class="card set-card" data-id="${s.id}">
+        <div class="swatch" style="background:${sw.bg}">${sw.icon}</div>
+        <div class="info">
+          <h3>${escapeHtml(s.title)}</h3>
+          <p>${s.itemCount} mots · ${s.dayCount} jour${s.dayCount>1?'s':''} · ${formatRelative(s.lastReviewedAt)}</p>
+        </div>
+        <div class="del" data-del="${s.id}">✕</div>
+      </div>`;
+    }).join('');
+  }
+  appEl.innerHTML = `
+    <div class="brand-row">
+      <div class="brand-badge">📘</div>
+      <div style="flex:1;"><h1>EnglishPractice</h1><p class="brand-sub">${sets.length} liste${sets.length>1?'s':''} enregistrée${sets.length>1?'s':''}</p></div>
+      <div class="chip-select" id="profileBadge" style="flex-shrink:0;">👤 ${escapeHtml(PROFILE || "Compte")}</div>
+    </div>
+    ${listHtml}
+    ${tabbarHtml()}
+  `;
+  bindTabbar();
+  document.getElementById('profileBadge').onclick = switchProfile;
+  document.getElementById('emptyAdd')?.addEventListener('click', ()=>{ VIEW='add'; render(); });
+  appEl.querySelectorAll('.set-card').forEach(card=>{
+    card.addEventListener('click', (e)=>{
+      if(e.target.closest('.del')) return;
+      openSet(card.dataset.id);
+    });
+  });
+  appEl.querySelectorAll('[data-del]').forEach(btn=>{
+    btn.addEventListener('click', async (e)=>{
+      e.stopPropagation();
+      const id = btn.dataset.del;
+      if(!confirm('Supprimer cette liste ?')) return;
+      sets = sets.filter(s=>s.id!==id);
+      await saveIndex();
+      await sDelete('set:'+id);
+      render();
+    });
+  });
+}
+
+function escapeHtml(s){
+  const d = document.createElement('div'); d.textContent = s; return d.innerHTML;
+}
+
+let pendingPairs = [];
+function renderAdd(){
+  appEl.innerHTML = `
+    <div class="topbar"><h1>Nouvelle liste</h1></div>
+    <div class="card">
+      <div class="field">
+        <label>Titre</label>
+        <input type="text" id="titleInput" placeholder="Ex. Environmental Issues 2">
+      </div>
+      <div class="field">
+        <label>Colle ta liste ici</label>
+        <textarea id="pasteInput" placeholder="environmental - écologique&#10;écologique - environmental&#10;wildlife - la faune et la flore&#10;..."></textarea>
+        <div class="hint">Une expression par ligne. Fonctionne avec export Anki (tabulation), tiret " - ", deux-points " : ", ou double-espace comme séparateur. Liste bidirectionnelle ou pas, les doublons inverses sont fusionnés automatiquement.</div>
+      </div>
+      <div class="parse-preview" id="preview"></div>
+      <div class="field">
+        <label>Répartir sur combien de jours ?</label>
+        <div class="stepper">
+          <button id="minusDay">−</button>
+          <span class="val" id="dayVal">3</span>
+          <button id="plusDay">+</button>
+        </div>
+      </div>
+      <button class="cta" id="saveBtn">Enregistrer la liste</button>
+    </div>
+    ${tabbarHtml()}
+  `;
+  bindTabbar();
+  let dayCount = 3;
+  const preview = document.getElementById('preview');
+  const pasteInput = document.getElementById('pasteInput');
+  const updatePreview = ()=>{
+    pendingPairs = parseVocabText(pasteInput.value);
+    if(pendingPairs.length===0){
+      preview.className='parse-preview'+(pasteInput.value.trim()?' show warn':'');
+      preview.innerHTML = 'Aucune paire détectée — vérifie que le texte contient bien des tabulations entre les colonnes.';
+    } else {
+      preview.className='parse-preview show';
+      preview.innerHTML = `<b>${pendingPairs.length}</b> expressions détectées → réparties en <b>${Math.min(dayCount, pendingPairs.length)}</b> jour(s).`;
+    }
+  };
+  pasteInput.addEventListener('input', updatePreview);
+  document.getElementById('minusDay').onclick = ()=>{ dayCount = Math.max(1, dayCount-1); document.getElementById('dayVal').textContent = dayCount; updatePreview(); };
+  document.getElementById('plusDay').onclick = ()=>{ dayCount = Math.min(7, dayCount+1); document.getElementById('dayVal').textContent = dayCount; updatePreview(); };
+
+  document.getElementById('saveBtn').onclick = async ()=>{
+    const title = document.getElementById('titleInput').value.trim() || 'Liste sans titre';
+    pendingPairs = parseVocabText(pasteInput.value);
+    if(pendingPairs.length===0){ showToast("Colle une liste valide d'abord"); return; }
+    const days = chunkIntoDays(pendingPairs, dayCount);
+    const id = 'list-' + Date.now();
+    const setObj = { id, title, createdAt: Date.now(), days, stats: {} };
+    const btn = document.getElementById('saveBtn');
+    btn.textContent = 'Enregistrement...'; btn.disabled = true;
+    const ok1 = await sSet('set:'+id, setObj);
+    sets.push({ id, title, createdAt: setObj.createdAt, itemCount: pendingPairs.length, dayCount: days.length });
+    const ok2 = await saveIndex();
+    if(!ok1 || !ok2){ showToast("Échec de l'enregistrement — réessaie"); btn.textContent='Enregistrer la liste'; btn.disabled=false; return; }
+    showToast('Liste enregistrée ✓');
+    VIEW = 'home';
+    render();
+  };
+}
+
+let pendingEditPairs = [];
+function renderEditSet(){
+  if(!currentSetObj){ VIEW='home'; render(); return; }
+  const dayOptions = currentSetObj.days.map((d,i)=>
+    `<div class="day-pill ${i===0?'active':''}" data-i="${i}">Jour ${i+1} · ${d.items.length}</div>`
+  ).join('');
+  appEl.innerHTML = `
+    <div class="back-row">
+      <div class="icon-btn" id="editBackBtn">‹</div>
+      <div class="label">Ajouter des mots — ${escapeHtml(currentSetObj.title)}</div>
+    </div>
+    <div class="card">
+      <div class="field">
+        <label>Colle les nouveaux mots</label>
+        <textarea id="editPasteInput" placeholder="new word - nouveau mot&#10;..."></textarea>
+        <div class="hint">Mêmes formats acceptés (tabulation, tiret, deux-points, double-espace). Les mots déjà présents dans cette liste sont ignorés automatiquement.</div>
+      </div>
+      <div class="parse-preview" id="editPreview"></div>
+      <div class="field">
+        <label>Ajouter à quel jour ?</label>
+        <div class="day-pills" id="editDayPills">
+          ${dayOptions}
+          <div class="chip-select" data-newday="1">+ Nouveau jour</div>
+        </div>
+      </div>
+      <button class="cta" id="editSaveBtn">Ajouter à la liste</button>
+    </div>
+    ${tabbarHtml()}
+  `;
+  bindTabbar();
+  document.getElementById('editBackBtn').onclick = ()=>{ VIEW='set'; render(); };
+
+  let targetDay = 0; // -1 means new day
+  const preview = document.getElementById('editPreview');
+  const pasteInput = document.getElementById('editPasteInput');
+  const existingKeys = new Set();
+  currentSetObj.days.forEach(d=>d.items.forEach(([en,fr])=>{
+    existingKeys.add((en+'|||'+fr).toLowerCase());
+    existingKeys.add((fr+'|||'+en).toLowerCase());
+  }));
+  const updatePreview = ()=>{
+    const parsed = parseVocabText(pasteInput.value);
+    pendingEditPairs = parsed.filter(([a,b])=> !existingKeys.has((a+'|||'+b).toLowerCase()));
+    const dupCount = parsed.length - pendingEditPairs.length;
+    if(parsed.length===0){
+      preview.className = 'parse-preview'+(pasteInput.value.trim()?' show warn':'');
+      preview.innerHTML = 'Aucune paire détectée.';
+    } else {
+      preview.className = 'parse-preview show';
+      preview.innerHTML = `<b>${pendingEditPairs.length}</b> nouveaux mots${dupCount>0?` · ${dupCount} déjà présents (ignorés)`:''}.`;
+    }
+  };
+  pasteInput.addEventListener('input', updatePreview);
+  appEl.querySelectorAll('#editDayPills > div').forEach(pill=>{
+    pill.onclick = ()=>{
+      appEl.querySelectorAll('#editDayPills > div').forEach(p=>p.classList.remove('active'));
+      if(pill.dataset.newday){ targetDay = -1; pill.classList.add('active'); }
+      else { targetDay = parseInt(pill.dataset.i); pill.classList.add('active'); }
+    };
+  });
+
+  document.getElementById('editSaveBtn').onclick = async ()=>{
+    updatePreview();
+    if(pendingEditPairs.length===0){ showToast("Rien de nouveau à ajouter"); return; }
+    if(targetDay === -1){
+      currentSetObj.days.push({ title:`Partie ${currentSetObj.days.length+1}`, items: pendingEditPairs.slice() });
+    } else {
+      currentSetObj.days[targetDay].items.push(...pendingEditPairs);
+    }
+    const btn = document.getElementById('editSaveBtn');
+    btn.textContent = 'Enregistrement...'; btn.disabled = true;
+    const ok = await sSet('set:'+currentSetObj.id, currentSetObj);
+    const idx = sets.find(s=>s.id===currentSetObj.id);
+    if(idx){
+      idx.itemCount = currentSetObj.days.reduce((a,d)=>a+d.items.length,0);
+      idx.dayCount = currentSetObj.days.length;
+    }
+    await saveIndex();
+    if(!ok){ showToast('Échec de l\u2019enregistrement'); btn.textContent='Ajouter à la liste'; btn.disabled=false; return; }
+    showToast(`${pendingEditPairs.length} mot${pendingEditPairs.length>1?'s':''} ajouté${pendingEditPairs.length>1?'s':''} ✓`);
+    VIEW = 'set';
+    render();
+  };
+}
+
+let currentSetObj = null;
+async function openSet(id){
+  currentSetId = id;
+  currentSetObj = await sGet('set:'+id);
+  if(!currentSetObj){ showToast('Liste introuvable'); return; }
+  currentSetObj.stats = currentSetObj.stats || {};
+  loadedSets[id] = currentSetObj;
+  currentDayIdx = 0;
+  VIEW = 'set';
+  render();
+}
+
+function renderSet(){
+  if(!currentSetObj){
+    appEl.innerHTML = `<div class="loading">Chargement...</div>${tabbarHtml()}`;
+    bindTabbar();
+    return;
+  }
+  const day = currentSetObj.days[currentDayIdx];
+  const pillsHtml = currentSetObj.days.map((d,i)=>
+    `<div class="day-pill ${i===currentDayIdx?'active':''}" data-i="${i}">Jour ${i+1} · ${d.items.length}</div>`
+  ).join('');
+  const wordRows = day.items.map(([en,fr])=>
+    `<div class="row"><span class="en">${escapeHtml(en)}</span><span class="fr">${escapeHtml(fr)}</span></div>`
+  ).join('');
+  const prio = priorityCount(currentSetObj, day.items);
+
+  appEl.innerHTML = `
+    <div class="back-row">
+      <div class="icon-btn" id="backBtn">‹</div>
+      <div class="label">${escapeHtml(currentSetObj.title)}</div>
+      <div class="icon-btn" id="editSetBtn" style="margin-left:auto;">✎</div>
+    </div>
+    <div class="day-pills">${pillsHtml}</div>
+    <div class="card">
+      <div class="meta-line">${day.items.length} expressions — relis-les puis restitue-les de mémoire avant l'exercice.${prio>0 ? `<br><b style="color:var(--accent)">★ ${prio} mot${prio>1?'s':''} à retravailler en priorité</b> (les cartes ratées reviennent plus souvent).` : ''}</div>
+      <div class="wordlist">${wordRows}</div>
+    </div>
+    <div class="segmented" id="dirSeg">
+      <button data-dir="mix" class="${quiz.direction==='mix'?'active':''}">Mélangé</button>
+      <button data-dir="fr2en" class="${quiz.direction==='fr2en'?'active':''}">FR → EN</button>
+      <button data-dir="en2fr" class="${quiz.direction==='en2fr'?'active':''}">EN → FR</button>
+    </div>
+    <div id="quizArea"></div>
+    ${tabbarHtml()}
+  `;
+  bindTabbar();
+  document.getElementById('backBtn').onclick = ()=>{ VIEW='home'; render(); };
+  document.getElementById('editSetBtn').onclick = ()=>{ VIEW='editSet'; render(); };
+  appEl.querySelectorAll('.day-pill').forEach(p=>{
+    p.onclick = ()=>{ currentDayIdx = parseInt(p.dataset.i); buildQueue(); render(); };
+  });
+  appEl.querySelectorAll('#dirSeg button').forEach(b=>{
+    b.onclick = ()=>{ quiz.direction = b.dataset.dir; buildQueue(); renderQuiz(); updateSegActive(); };
+  });
+  if(quiz.queue.length===0 || quiz._day!==currentDayIdx) buildQueue();
+  quiz.rebuild = buildQueue;
+  renderQuiz();
+}
+
+function updateSegActive(){
+  document.querySelectorAll('#dirSeg button').forEach(b=>{
+    b.classList.toggle('active', b.dataset.dir===quiz.direction);
+  });
+}
+
+function buildQueue(){
+  const day = currentSetObj.days[currentDayIdx];
+  const stats = currentSetObj.stats || {};
+  let list = [];
+  day.items.forEach(([en,fr])=>{
+    const dirs = quiz.direction==='mix' ? ['fr2en','en2fr'] : [quiz.direction];
+    dirs.forEach(dir=>{
+      const key = pairKey(en,fr,dir);
+      const q = dir==='fr2en'?fr:en, a = dir==='fr2en'?en:fr;
+      const reps = repsFor(stats, key);
+      for(let r=0;r<reps;r++) list.push({q,a,dir,setId:currentSetId,key});
+    });
+  });
+  for(let i=list.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [list[i],list[j]]=[list[j],list[i]]; }
+  quiz.queue = list; quiz.index=0; quiz.score=0; quiz.answered=false; quiz._day = currentDayIdx;
+}
+
+function selectedItemsForReview(){
+  let items = [];
+  sets.forEach(s=>{
+    if(!reviewSelection || !reviewSelection.has(s.id)) return;
+    const full = loadedSets[s.id];
+    if(!full) return;
+    full.days.forEach(d=> d.items.forEach(([en,fr])=> items.push({en,fr,setId:s.id})));
+  });
+  return items;
+}
+
+function buildReviewQueue(){
+  const items = selectedItemsForReview();
+  let list = [];
+  items.forEach(({en,fr,setId})=>{
+    const stats = (loadedSets[setId] && loadedSets[setId].stats) || {};
+    const dirs = quiz.direction==='mix' ? ['fr2en','en2fr'] : [quiz.direction];
+    dirs.forEach(dir=>{
+      const key = pairKey(en,fr,dir);
+      const q = dir==='fr2en'?fr:en, a = dir==='fr2en'?en:fr;
+      const reps = repsFor(stats, key);
+      for(let r=0;r<reps;r++) list.push({q,a,dir,setId,key});
+    });
+  });
+  for(let i=list.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [list[i],list[j]]=[list[j],list[i]]; }
+  quiz.queue = list; quiz.index=0; quiz.score=0; quiz.answered=false; quiz._day=null;
+}
+
+async function renderReviewAll(){
+  if(sets.length===0){
+    appEl.innerHTML = `
+      <div class="brand-row"><div class="brand-badge">🔁</div><div><h1>Réviser tout</h1><p class="brand-sub">Mélange plusieurs listes</p></div></div>
+      <div class="empty"><div class="em-icon">📭</div><h3>Pas encore de liste</h3><p>Ajoute au moins une liste pour pouvoir la réviser ici.</p></div>
+      ${tabbarHtml()}`;
+    bindTabbar();
+    return;
+  }
+  if(!reviewStarted){
+    appEl.innerHTML = `<div class="loading">Préparation...</div>`;
+    for(const s of sets){
+      if(!loadedSets[s.id]){
+        const f = await sGet('set:'+s.id);
+        loadedSets[s.id] = f || {id:s.id, title:s.title, days:[], stats:{}};
+      }
+      loadedSets[s.id].stats = loadedSets[s.id].stats || {};
+    }
+    if(reviewSelection===null) reviewSelection = new Set(sets.map(s=>s.id));
+  }
+
+  let bodyHtml;
+  if(!reviewStarted){
+    const chips = sets.slice().sort((a,b)=>b.createdAt-a.createdAt).map(s=>{
+      const on = reviewSelection.has(s.id);
+      return `<div class="chip-select ${on?'':'off'}" data-id="${s.id}">${on?'✓ ':''}${escapeHtml(s.title)}</div>`;
+    }).join('');
+    const totalItems = selectedItemsForReview().length;
+    bodyHtml = `
+      <div class="card">
+        <div class="section-title">Listes incluses</div>
+        <div class="day-pills" id="chipRow">${chips}</div>
+        <div class="section-title" style="margin-top:14px;">Sens</div>
+        <div class="segmented" id="dirSegAll">
+          <button data-dir="mix" class="${quiz.direction==='mix'?'active':''}">Mélangé</button>
+          <button data-dir="fr2en" class="${quiz.direction==='fr2en'?'active':''}">FR → EN</button>
+          <button data-dir="en2fr" class="${quiz.direction==='en2fr'?'active':''}">EN → FR</button>
+        </div>
+        <div class="meta-line">${totalItems} mot${totalItems>1?'s':''} sélectionné${totalItems>1?'s':''}, toutes listes confondues.</div>
+        <button class="cta" id="launchReviewBtn" ${totalItems===0?'disabled':''}>Lancer la révision</button>
+      </div>`;
+  } else {
+    bodyHtml = `
+      <div class="back-row" style="margin-bottom:10px;">
+        <div class="icon-btn" id="reviewBackBtn">‹</div>
+        <div class="label">Modifier la sélection</div>
+      </div>
+      <div id="quizArea"></div>`;
+  }
+
+  appEl.innerHTML = `
+    <div class="brand-row">
+      <div class="brand-badge">🔁</div>
+      <div><h1>Réviser tout</h1><p class="brand-sub">Mélange plusieurs listes pour ne rien oublier</p></div>
+    </div>
+    ${bodyHtml}
+    ${tabbarHtml()}
+  `;
+  bindTabbar();
+
+  if(!reviewStarted){
+    appEl.querySelectorAll('#chipRow .chip-select').forEach(chip=>{
+      chip.onclick = ()=>{
+        const id = chip.dataset.id;
+        if(reviewSelection.has(id)) reviewSelection.delete(id); else reviewSelection.add(id);
+        renderReviewAll();
+      };
+    });
+    appEl.querySelectorAll('#dirSegAll button').forEach(b=>{
+      b.onclick = ()=>{ quiz.direction = b.dataset.dir; renderReviewAll(); };
+    });
+    document.getElementById('launchReviewBtn')?.addEventListener('click', ()=>{
+      buildReviewQueue();
+      reviewStarted = true;
+      quiz.rebuild = buildReviewQueue;
+      render();
+    });
+  } else {
+    document.getElementById('reviewBackBtn').onclick = ()=>{ reviewStarted=false; render(); };
+    if(quiz.queue.length===0) buildReviewQueue();
+    quiz.rebuild = buildReviewQueue;
+    renderQuiz();
+  }
+}
+
+function renderQuiz(){
+  const area = document.getElementById('quizArea');
+  if(!area) return;
+  if(quiz.index >= quiz.queue.length){
+    area.innerHTML = `
+      <div class="card done-wrap">
+        <div class="done-score">${quiz.score}/${quiz.queue.length}</div>
+        <p>Score sur ce passage</p>
+        <button class="cta" id="restartBtn" style="max-width:220px;margin:0 auto;">Relancer</button>
+      </div>`;
+    document.getElementById('restartBtn').onclick = ()=>{ quiz.rebuild(); renderQuiz(); };
+    return;
+  }
+  const item = quiz.queue[quiz.index];
+  const pct = Math.round((quiz.index/quiz.queue.length)*100);
+  area.innerHTML = `
+    <div class="card">
+      <span class="quiz-tag">${item.dir==='fr2en'?'FR → EN':'EN → FR'}</span>
+      <div class="quiz-progress"><span>Carte ${quiz.index+1}/${quiz.queue.length}</span><span>Score ${quiz.score}</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <div class="prompt">${escapeHtml(item.q)}</div>
+      <input type="text" class="answer-input" id="ansInput" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Ta réponse...">
+      <div class="qrow">
+        <button class="btn-check" id="checkBtn">Vérifier</button>
+        <button class="btn-idk" id="idkBtn">Je ne sais pas</button>
+      </div>
+      <div class="feedback" id="feedback"></div>
+      <button class="next-btn" id="nextBtn">Carte suivante →</button>
+    </div>
+  `;
+  const input = document.getElementById('ansInput');
+  input.focus();
+  document.getElementById('checkBtn').onclick = checkAnswer;
+  document.getElementById('idkBtn').onclick = ()=>reveal(false);
+  document.getElementById('nextBtn').onclick = ()=>{ quiz.index++; quiz.answered=false; renderQuiz(); };
+  input.addEventListener('keydown', e=>{
+    if(e.key==='Enter'){ if(!quiz.answered) checkAnswer(); else { quiz.index++; quiz.answered=false; renderQuiz(); } }
+  });
+}
+
+function checkAnswer(){
+  const input = document.getElementById('ansInput');
+  if(!input.value.trim()) return;
+  const item = quiz.queue[quiz.index];
+  const alts = splitAlternatives(item.a).map(normalize);
+  const userNorm = normalize(input.value);
+  const correct = alts.includes(userNorm);
+  let close = false;
+  if(!correct){
+    const dist = closestDistance(userNorm, alts);
+    close = isCloseEnough(dist, userNorm.length);
+  }
+  if(correct) quiz.score++;
+  reveal(correct, close);
+}
+
+function reveal(correct, close){
+  quiz.answered = true;
+  const item = quiz.queue[quiz.index];
+  const fb = document.getElementById('feedback');
+  document.getElementById('checkBtn').style.display='none';
+  document.getElementById('idkBtn').style.display='none';
+  document.getElementById('ansInput').disabled = true;
+  fb.className = 'feedback ' + (correct?'good':(close?'close':'bad'));
+  if(correct) fb.innerHTML = '✓ Correct — <b>'+escapeHtml(item.a)+'</b>';
+  else if(close) fb.innerHTML = '➜ Presque ! Attention à l\u2019orthographe — <b>'+escapeHtml(item.a)+'</b>';
+  else fb.innerHTML = '✗ Réponse : <b>'+escapeHtml(item.a)+'</b>';
+  document.getElementById('nextBtn').style.display = 'block';
+  recordAnswer(item, correct);
+}
+
+// ---------- Account ----------
+function showProfileGate(){ showAuthGate(); }
+async function chooseProfile(name){ PROFILE=name; await startApp(); }
+function switchProfile(){
+  if(!AUTH_USER){showAuthGate();return;}
+  appEl.innerHTML=`<div class="brand-row" style="margin-top:36px;"><div class="brand-badge">📘</div><div style="flex:1;"><h1>Mon compte</h1><p class="brand-sub">${escapeHtml(AUTH_USER.email||'')}</p></div></div>
+  <div class="card"><div class="section-title">Compte</div><p class="account-email">${escapeHtml(AUTH_USER.email||'')}</p>
+  <div class="auth-actions"><button class="cta" id="accountBack">Retour</button><button class="cta danger" id="deleteAccountBtn">Supprimer mon compte</button></div>
+  <div class="auth-actions"><button class="cta" id="logoutBtn">Se déconnecter</button></div></div>`;
+  document.getElementById('accountBack').onclick=()=>{VIEW='home';render();};
+  document.getElementById('logoutBtn').onclick=signOut;
+  document.getElementById('deleteAccountBtn').onclick=deleteAccount;
+}
+
+async function startApp(){
+  appEl.innerHTML=`<div class="loading">Chargement de tes listes...</div>`;
+  try{ await loadIndex(); render(); }
+  catch(err){ appEl.innerHTML=`<div class="loading">Un problème est survenu au chargement.<br><br>${escapeHtml(String(err&&err.message||err))}</div>`; }
+}
+
+// ---------- Init ----------
+(async function init(){
+  if(!supabaseConfigured){showAuthGate();return;}
+  try{
+    const {data}=await sb.auth.getSession();
+    AUTH_USER=data?.session?.user||null;
+    if(AUTH_USER){
+      let legacyProfile=null; try{ legacyProfile=localStorage.getItem(LS_PREFIX+'activeProfile'); }catch(x){}
+      PROFILE=(AUTH_USER.user_metadata?.name || AUTH_USER.email?.split('@')[0] || 'Utilisateur').trim();
+      setActiveProfile(PROFILE);
+      await migrateLocalProfileIfNeeded(legacyProfile);
+      await startApp();
+    }else showAuthGate();
+    sb.auth.onAuthStateChange(async (_event,session)=>{
+      if(session?.user && !AUTH_USER){
+        AUTH_USER=session.user; PROFILE=(AUTH_USER.user_metadata?.name||AUTH_USER.email?.split('@')[0]||'Utilisateur').trim(); setActiveProfile(PROFILE); await startApp();
+      }
+    });
+  }catch(err){showAuthGate(authErrorMessage(err));}
+})();
+</script>
+</body>
+</html>
