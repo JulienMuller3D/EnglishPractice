@@ -322,6 +322,35 @@ body{
 .wordlist .fr{color:var(--ink-soft); text-align:right;}
 .meta-line{font-size:0.78rem; color:var(--ink-soft); margin-bottom:12px;}
 
+
+/* Active learning */
+.learning-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.learning-action{
+  border:1px solid var(--stroke);background:var(--glass);
+  backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
+  border-radius:20px;padding:15px;text-align:left;cursor:pointer;
+  box-shadow:0 6px 20px rgba(31,41,55,.07);
+  transition:transform .15s var(--ease),box-shadow .2s var(--ease);
+}
+.learning-action:active{transform:scale(.97);}
+.learning-action .la-icon{font-size:1.3rem;margin-bottom:7px;}
+.learning-action .la-title{font-weight:700;font-size:.88rem;margin-bottom:3px;}
+.learning-action .la-sub{font-size:.72rem;color:var(--ink-soft);line-height:1.35;}
+.study-plan{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:13px 15px;border-radius:18px;background:rgba(10,132,255,.08);
+  border:1px solid rgba(10,132,255,.12);margin-bottom:14px;
+}
+.study-plan .sp-main{font-weight:700;font-size:.9rem;}
+.study-plan .sp-sub{font-size:.72rem;color:var(--ink-soft);margin-top:2px;}
+.study-plan .sp-badge{font-size:.75rem;font-weight:750;color:var(--accent);
+  background:var(--accent-soft);padding:7px 10px;border-radius:12px;white-space:nowrap;}
+.exercise-title{font-size:1.15rem;font-weight:750;letter-spacing:-.02em;margin-bottom:5px;}
+.exercise-sub{font-size:.78rem;color:var(--ink-soft);line-height:1.4;margin-bottom:15px;}
+.target-words{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0 14px;}
+.target-word{padding:6px 9px;border-radius:11px;background:var(--accent-soft);
+  color:var(--accent);font-size:.72rem;font-weight:700;}
+
 /* Quiz card */
 .quiz-tag{
   display:inline-block;
@@ -451,6 +480,119 @@ body{
 .loading{text-align:center; padding:60px 20px; color:var(--ink-soft); font-size:0.9rem;}
 
 .auth-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.auth-actions .cta{flex:1;min-width:140px}.auth-note{font-size:.82rem;color:var(--ink-soft);line-height:1.45;margin-top:12px}.auth-switch{text-align:center;margin-top:14px;font-size:.86rem;color:var(--ink-soft)}.auth-switch button{border:0;background:none;color:var(--accent);font:inherit;cursor:pointer;text-decoration:underline}.danger{background:#fff0f0!important;color:#c62828!important;border:1px solid #f2b8b8!important}.account-email{font-size:.84rem;color:var(--ink-soft);margin-top:4px;word-break:break-all}
+
+/* ===== iOS 26 / Responsive layout V4 ===== */
+* { box-sizing: border-box; }
+html, body { width: 100%; min-height: 100%; }
+body {
+  margin: 0;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+button, input, select, textarea {
+  font: inherit;
+  max-width: 100%;
+}
+button {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+input, textarea, select {
+  font-size: 16px; /* évite le zoom automatique sur iPhone/iPad */
+}
+
+@media (min-width: 700px) {
+  body { padding: 24px; }
+  .app, main, .container {
+    width: min(100%, 980px);
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .learning-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .study-plan {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 18px;
+    align-items: center;
+  }
+}
+
+@media (min-width: 1050px) {
+  body { padding: 32px; }
+  .app, main, .container {
+    width: min(100%, 1180px);
+  }
+  .learning-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 699px) {
+  body { padding: 12px; }
+  .app, main, .container {
+    width: 100%;
+    max-width: 100%;
+  }
+  .learning-grid {
+    grid-template-columns: 1fr;
+  }
+  .study-plan {
+    display: block;
+  }
+}
+
+@media (max-width: 430px) {
+  body { padding: 8px; }
+  .card, .panel, .section, .study-plan {
+    border-radius: 20px;
+  }
+  h1 { font-size: clamp(26px, 8vw, 34px); }
+  h2 { font-size: clamp(20px, 6vw, 26px); }
+  .learning-action, button {
+    min-height: 46px;
+  }
+}
+
+@media (pointer: coarse) {
+  button, .learning-action, select {
+    min-height: 44px;
+  }
+  input, textarea, select {
+    min-height: 44px;
+  }
+}
+
+/* Empêche les longs mots/traductions de casser la mise en page */
+.card, .panel, .section, .study-plan, .learning-action,
+.feedback, .target-words, p, h1, h2, h3, label {
+  overflow-wrap: anywhere;
+}
+
+/* Les tableaux/listes restent utilisables sur petits écrans */
+.table-wrap, .overflow-auto {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Respect du mode paysage sur téléphone/tablette */
+@media (max-height: 500px) and (orientation: landscape) {
+  body { padding: 8px 16px; }
+}
+
+/* Respect des préférences d'accessibilité */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -654,7 +796,10 @@ function stripArticles(s){
   return s.replace(/^(to |an |a |the |une |un |les |la |le |l')/i,'').trim();
 }
 function normalize(s){
-  return stripArticles(s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[()]/g,'').trim());
+  let x=String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+  x=x.replace(/[’‘]/g,"'").replace(/[.,!?;:]/g,' ').replace(/[-_/]/g,' ');
+  x=x.replace(/\s+/g,' ').trim();
+  return stripArticles(x);
 }
 function splitAlternatives(s){ return s.split(/,|\//).map(x=>x.trim()).filter(Boolean); }
 
@@ -767,6 +912,7 @@ function render(){
   else if(VIEW==='set') renderSet();
   else if(VIEW==='reviewAll') renderReviewAll();
   else if(VIEW==='editSet') renderEditSet();
+  else if(VIEW==='sentenceLab') renderSentenceLab();
 }
 
 function tabbarHtml(){
@@ -854,10 +1000,10 @@ function renderAdd(){
       </div>
       <div class="parse-preview" id="preview"></div>
       <div class="field">
-        <label>Répartir sur combien de jours ?</label>
+        <label>Programme d’apprentissage (1 à 31 jours)</label>
         <div class="stepper">
           <button id="minusDay">−</button>
-          <span class="val" id="dayVal">3</span>
+          <span class="val" id="dayVal">7</span>
           <button id="plusDay">+</button>
         </div>
       </div>
@@ -866,7 +1012,7 @@ function renderAdd(){
     ${tabbarHtml()}
   `;
   bindTabbar();
-  let dayCount = 3;
+  let dayCount = 7;
   const preview = document.getElementById('preview');
   const pasteInput = document.getElementById('pasteInput');
   const updatePreview = ()=>{
@@ -881,7 +1027,7 @@ function renderAdd(){
   };
   pasteInput.addEventListener('input', updatePreview);
   document.getElementById('minusDay').onclick = ()=>{ dayCount = Math.max(1, dayCount-1); document.getElementById('dayVal').textContent = dayCount; updatePreview(); };
-  document.getElementById('plusDay').onclick = ()=>{ dayCount = Math.min(7, dayCount+1); document.getElementById('dayVal').textContent = dayCount; updatePreview(); };
+  document.getElementById('plusDay').onclick = ()=>{ dayCount = Math.min(31, dayCount+1); document.getElementById('dayVal').textContent = dayCount; updatePreview(); };
 
   document.getElementById('saveBtn').onclick = async ()=>{
     const title = document.getElementById('titleInput').value.trim() || 'Liste sans titre';
@@ -1025,7 +1171,26 @@ function renderSet(){
       <div class="meta-line">${day.items.length} expressions — relis-les puis restitue-les de mémoire avant l'exercice.${prio>0 ? `<br><b style="color:var(--accent)">★ ${prio} mot${prio>1?'s':''} à retravailler en priorité</b> (les cartes ratées reviennent plus souvent).` : ''}</div>
       <div class="wordlist">${wordRows}</div>
     </div>
-    <div class="segmented" id="dirSeg">
+    <div class="study-plan">
+    <div>
+      <div class="sp-main">Programme sur ${currentSetObj.days.length} jour${currentSetObj.days.length>1?'s':''}</div>
+      <div class="sp-sub">Les mots sont répartis automatiquement</div>
+    </div>
+    <div class="sp-badge">${currentSetObj.days.length}/31</div>
+  </div>
+  <div class="learning-grid">
+    <button class="learning-action" id="sentenceLabBtn">
+      <div class="la-icon">✍️</div>
+      <div class="la-title">Traduire des phrases</div>
+      <div class="la-sub">Réutiliser les mots en contexte</div>
+    </button>
+    <button class="learning-action" id="vocabQuizBtn">
+      <div class="la-icon">🧠</div>
+      <div class="la-title">Révision active</div>
+      <div class="la-sub">Rappeler les mots de mémoire</div>
+    </button>
+  </div>
+  <div class="segmented" id="dirSeg">
       <button data-dir="mix" class="${quiz.direction==='mix'?'active':''}">Mélangé</button>
       <button data-dir="fr2en" class="${quiz.direction==='fr2en'?'active':''}">FR → EN</button>
       <button data-dir="en2fr" class="${quiz.direction==='en2fr'?'active':''}">EN → FR</button>
@@ -1036,6 +1201,8 @@ function renderSet(){
   bindTabbar();
   document.getElementById('backBtn').onclick = ()=>{ VIEW='home'; render(); };
   document.getElementById('editSetBtn').onclick = ()=>{ VIEW='editSet'; render(); };
+  document.getElementById('sentenceLabBtn').onclick = ()=>{ VIEW='sentenceLab'; render(); };
+  document.getElementById('vocabQuizBtn').onclick = ()=>{ document.getElementById('quizArea')?.scrollIntoView({behavior:'smooth',block:'center'}); };
   appEl.querySelectorAll('.day-pill').forEach(p=>{
     p.onclick = ()=>{ currentDayIdx = parseInt(p.dataset.i); buildQueue(); render(); };
   });
@@ -1181,6 +1348,222 @@ async function renderReviewAll(){
     quiz.rebuild = buildReviewQueue;
     renderQuiz();
   }
+}
+
+
+function getAllItems(setObj){
+  return (setObj?.days || []).flatMap((d,dayIdx)=>
+    (d.items || []).map(([en,fr])=>({en,fr,dayIdx}))
+  );
+}
+
+/*
+  Les phrases sont générées UNIQUEMENT à partir des mots de la liste
+  de l'utilisateur. Aucun vocabulaire thématique n'est codé en dur.
+  On ajoute seulement des mots-outils anglais/français très courants
+  nécessaires pour former une phrase simple.
+*/
+function pickStudyItems(setObj,count=3){
+  const all=getAllItems(setObj);
+  if(!all.length) return [];
+  const shuffled=[...all].sort(()=>Math.random()-0.5);
+  return shuffled.slice(0,Math.min(count,all.length));
+}
+
+function wordKind(en,fr){
+  const e=String(en).toLowerCase().trim();
+  const f=String(fr).toLowerCase().trim();
+  if(/^to\s+/.test(e) || /\b(to|être|avoir|faire|aller|venir|prendre|mettre|pouvoir|devoir|vouloir|savoir)\b/.test(e+' '+f))
+    return 'verb';
+  if(/^[a-z]+ly\b/.test(e) || /\b(ment)\b/.test(f)) return 'adverb';
+  if(/^(a |an |the |my |your |his |her |our |their )/.test(e)) return 'noun';
+  if(/\b(able|ful|less|ous|ive|al|ic|ish|y)$/.test(e)) return 'adjective';
+  return 'noun';
+}
+
+function cleanPhrasePart(x){
+  return String(x||'')
+    .replace(/^(a|an|the|to)\s+/i,'')
+    .trim();
+}
+
+function makeSentencePair(item){
+  const kind=wordKind(item.en,item.fr);
+  const en=cleanPhrasePart(item.en);
+  const fr=cleanPhrasePart(item.fr);
+
+  // Phrases courtes et génériques : le mot de vocabulaire choisi est
+  // toujours au centre de l'exercice.
+  if(kind==='verb'){
+    return {
+      en:`I want to ${en}.`,
+      fr:`Je veux ${fr}.`,
+      target:item.en
+    };
+  }
+  if(kind==='adjective'){
+    return {
+      en:`It is ${en}.`,
+      fr:`C'est ${fr}.`,
+      target:item.en
+    };
+  }
+  if(kind==='adverb'){
+    return {
+      en:`He did it ${en}.`,
+      fr:`Il l'a fait ${fr}.`,
+      target:item.en
+    };
+  }
+  return {
+    en:`I saw ${item.en}.`,
+    fr:`J'ai vu ${item.fr}.`,
+    target:item.en
+  };
+}
+
+function normalizeSentence(s){
+  return String(s||'')
+    .toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[’']/g,"'")
+    .replace(/[.,!?;:()[\]{}"“”]/g,' ')
+    .replace(/\s+/g,' ')
+    .trim();
+}
+
+function sentenceContainsTarget(answer,target){
+  const a=normalizeSentence(answer);
+  const t=normalizeSentence(cleanPhrasePart(target));
+  if(!t) return false;
+  return a.includes(t);
+}
+
+function renderSentenceLab(){
+  if(!currentSetObj){VIEW='home';render();return;}
+  const dir=renderSentenceLab.dir||'fr2en';
+
+  // Une seule entrée est utilisée pour pouvoir générer une phrase
+  // grammaticalement simple autour du mot réellement appris.
+  const items=pickStudyItems(currentSetObj,1);
+  if(!items.length){
+    appEl.innerHTML=`
+      <div class="card">
+        <div class="exercise-title">Traduction & mise en contexte</div>
+        <p>Aucun mot n'est disponible dans cette liste.</p>
+      </div>
+      ${tabbarHtml()}`;
+    bindTabbar();
+    return;
+  }
+
+  const pair=makeSentencePair(items[0]);
+  const source=dir==='fr2en'?pair.fr:pair.en;
+  const expected=dir==='fr2en'?pair.en:pair.fr;
+  const target=pair.target;
+
+  appEl.innerHTML=`
+    <div class="back-row">
+      <div class="icon-btn" id="sentenceBack">‹</div>
+      <div class="label">${escapeHtml(currentSetObj.title)}</div>
+    </div>
+    <div class="card">
+      <div class="exercise-title">Traduction & mise en contexte</div>
+      <div class="exercise-sub">
+        La phrase est générée à partir d'un mot de ta liste.
+        Le mot à apprendre est affiché ci-dessous.
+      </div>
+
+      <div class="segmented" id="sentenceDir">
+        <button data-dir="fr2en" class="${dir==='fr2en'?'active':''}">FR → EN</button>
+        <button data-dir="en2fr" class="${dir==='en2fr'?'active':''}">EN → FR</button>
+      </div>
+
+      <div class="target-words">
+        <span class="target-word">${escapeHtml(target)}</span>
+      </div>
+
+      <div class="prompt" style="font-size:1.12rem;min-height:auto;">
+        ${escapeHtml(source)}
+      </div>
+
+      <input class="answer-input" id="sentenceAnswer"
+        placeholder="${dir==='fr2en'?'Écris la phrase en anglais…':'Écris la phrase en français…'}"
+        autocomplete="off" spellcheck="true">
+
+      <button class="btn-check" id="sentenceCheck"
+        style="width:100%;border:0;border-radius:13px;padding:14px;font-size:.95rem;font-weight:650;cursor:pointer;">
+        Vérifier
+      </button>
+
+      <div id="sentenceFeedback"></div>
+
+      <button class="next-btn" id="sentenceNext" style="display:block">
+        Nouvelle phrase →
+      </button>
+    </div>
+    ${tabbarHtml()}
+  `;
+
+  bindTabbar();
+  document.getElementById('sentenceBack').onclick=()=>{VIEW='set';render();};
+
+  appEl.querySelectorAll('#sentenceDir button').forEach(b=>{
+    b.onclick=()=>{
+      renderSentenceLab.dir=b.dataset.dir;
+      renderSentenceLab();
+    };
+  });
+
+  const input=document.getElementById('sentenceAnswer');
+  const check=document.getElementById('sentenceCheck');
+  const next=document.getElementById('sentenceNext');
+  const fb=document.getElementById('sentenceFeedback');
+
+  input.focus();
+
+  check.onclick=()=>{
+    const answer=input.value.trim();
+    if(!answer) return;
+
+    const normalizedAnswer=normalizeSentence(answer);
+    const normalizedExpected=normalizeSentence(expected);
+    const targetFound=sentenceContainsTarget(answer,target);
+    const exact=normalizedAnswer===normalizedExpected;
+
+    fb.style.display='block';
+
+    if(exact){
+      fb.className='feedback ok';
+      fb.innerHTML=`✅ <b>Correct !</b><br>
+        Ta traduction correspond à la phrase attendue.`;
+    }else if(targetFound){
+      fb.className='feedback close';
+      fb.innerHTML=`🟠 <b>Le mot appris est bien utilisé.</b><br>
+        Ta phrase contient <b>${escapeHtml(cleanPhrasePart(target))}</b>,
+        mais elle ne correspond pas exactement à la traduction attendue.
+        <div style="margin-top:8px;">
+          <b>Réponse attendue :</b> ${escapeHtml(expected)}
+        </div>`;
+    }else{
+      fb.className='feedback bad';
+      fb.innerHTML=`❌ <b>À revoir.</b><br>
+        Le mot travaillé <b>${escapeHtml(cleanPhrasePart(target))}</b>
+        n'apparaît pas dans ta réponse.
+        <div style="margin-top:8px;">
+          <b>Réponse attendue :</b> ${escapeHtml(expected)}
+        </div>`;
+    }
+
+    input.disabled=true;
+    check.style.display='none';
+  };
+
+  input.addEventListener('keydown',e=>{
+    if(e.key==='Enter' && !e.shiftKey) check.click();
+  });
+
+  next.onclick=()=>renderSentenceLab();
 }
 
 function renderQuiz(){
